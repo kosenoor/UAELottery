@@ -226,7 +226,8 @@
         <div class="investor-card">Nikah</div>
         <div class="investor-card">Stan</div>
         <div class="investor-card">Rohan</div>
-		<div class="investor-card">Sowmya</div>
+        <div class="investor-card">Sowmya</div>
+
       </div>
 
 
@@ -265,6 +266,7 @@
     <option>Nikah</option>
     <option>Stan</option>
     <option>Rohan</option>
+    <option>Sowmya</option>
   </select>
 
   <input type="number" id="investmentAmount" placeholder="Amount Received (AED)">
@@ -305,6 +307,7 @@
         <option>Nikah</option>
         <option>Stan</option>
         <option>Rohan</option>
+        <option>Sowmya</option>
       </select>
 
       <input type="text" id="lotteryNumber" placeholder="Lottery Number">
@@ -342,6 +345,28 @@
       AED 0
     </h1>
   </div>
+
+<div style="
+    flex:1;
+    min-width:250px;
+    background:rgba(255,255,255,0.12);
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+">
+    <h3 style="color:#38bdf8;">Tickets Purchased</h3>
+
+    <h1 id="ticketPurchased">
+        AED 0
+    </h1>
+
+    <p id="ticketCount">
+        0 Tickets
+    </p>
+</div>
+
+
+
 
 <div style="
     flex:1;
@@ -766,6 +791,9 @@ function loadInvestments() {
 
       const row = document.createElement('tr');
 
+
+      document.getElementById("totalInvestment").innerText =      "AED " + totalInvestmentReceived;
+
       row.innerHTML = `
         <td>${item.date}</td>
         <td>${item.investor}</td>
@@ -799,22 +827,26 @@ window.deleteInvestment = async function (id) {
 
 function updateBalance() {
 
-  const winningEl = document.getElementById('totalWinning');
-  const ticketsEl = document.getElementById('totalInvestment');
+    const winning = Number(
+        document.getElementById("totalWinning")
+        .innerText.replace("AED ","")
+    );
 
-  const winning = Number(
-    (winningEl.innerText || '0').replace('AED ', '')
-  );
+    const tickets = Number(
+        document.getElementById("ticketPurchased")
+        .innerText.replace("AED ","")
+    );
 
-  const tickets = Number(
-    (ticketsEl.innerText || '0').replace('AED ', '')
-  );
+    const balance =
+        totalInvestmentReceived +
+        winning -
+        tickets;
 
-  const balance = totalInvestmentReceived + winning - tickets;
+    document.getElementById("balanceAmount").innerText =
+        "AED " + balance;
 
-  const balanceEl = document.getElementById('balanceAmount');
-  balanceEl.innerText = 'AED ' + balance;
-  balanceEl.style.color = balance >= 0 ? '#22c55e' : '#ef4444';
+    document.getElementById("balanceAmount").style.color =
+        balance >= 0 ? "#22c55e" : "#ef4444";
 }
 
 
@@ -904,10 +936,13 @@ function loadLotteries() {
 
       let imageHTML = 'No Image';
 
-const totalInvestment = totalEntries * 50;
+const ticketCost = totalEntries * 50;
 
-document.getElementById('totalInvestment').innerText =
-  'AED ' + totalInvestment;
+document.getElementById("ticketPurchased").innerText =
+    "AED " + ticketCost;
+
+document.getElementById("ticketCount").innerText =
+    totalEntries + " Tickets";
 
 document.getElementById('totalWinning').innerText =
   'AED ' + totalWinning;
